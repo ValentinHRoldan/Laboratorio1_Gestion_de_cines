@@ -1,0 +1,7 @@
+# Archivos de caché y media temporales
+media/
+staticfiles/
+static_root/
+tmp/
+**/__pycache__/
+.env
