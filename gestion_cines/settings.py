@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'apps.usuarios',
-    'apps.peliculas',
     'apps.reservas',
     'apps.funciones',
 ]
