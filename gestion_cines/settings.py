@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.usuario',
     'apps.reservas',
     'apps.funciones',
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,20 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer'
     ],
+    # 'EXCEPTION_HANDLER': 'apps.anuncio.utils.custom_exception_handler',
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
+    'VERSION_PARAM': 'version',
+    'ALLOWED_VERSION': ['1','2'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication', 
+        'rest_framework.authentication.SessionAuthentication',  
+    ),
+}
+
+SIMPLE_JWT = {
+    'SIGNING_KEY': SECRET_KEY, # Presente por defecto en settings
+    'ALGORITHM': 'HS256', # Algoritmo de firma }
 }
