@@ -21,3 +21,28 @@ DEBUG=True
 -----------------------------------------------------
 agregar los datos de tu base de datos y listo
 este archivo .env no se subirá al repositorio
+
+el puerto para postgres es generalmente 5432
+el db_host es el host donde está la bd, generalmente es localhost si está en la misma pc
+
+DEBUG=True activa el modo de desarrollo en Django. Esto significa que:
+
+Se muestran mensajes detallados de error y pistas de depuración en el navegador si
+ algo sale mal (como un error en la vista, modelo, etc.).
+
+Django también muestra el traceback completo cuando se produce un error en el código. 
+Esto ayuda mucho a los desarrolladores para identificar rápidamente problemas en la aplicación.
+
+Archivos estáticos como imágenes, CSS y JavaScript se cargan directamente desde el sistema de archivos, 
+sin necesidad de configuraciones adicionales.
+
+Seguridad y rendimiento:
+
+NO SE DEBE USAR EN PRODUCCIÓN: En un entorno de producción, DEBUG=True puede revelar detalles sensibles 
+sobre tu aplicación y su infraestructura (como contraseñas, variables de entorno y rutas de archivos). 
+Esto sería un riesgo de seguridad, ya que personas malintencionadas podrían obtener información valiosa 
+sobre la estructura de tu aplicación.
+
+Rendimiento: Cuando DEBUG=True, Django no optimiza la velocidad, y los procesos pueden ser más 
+lentos debido al nivel de detalle que genera en los logs de errores. En producción, 
+debes configurar DEBUG=False para un rendimiento óptimo.
