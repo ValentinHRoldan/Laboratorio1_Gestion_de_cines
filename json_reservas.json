@@ -1,0 +1,38 @@
+[
+    {
+      "usuario": 1,
+      "funcion": 1,
+      "cantidad_entradas": 2,
+      "asiento": "A12",
+      "precio_total": 20.00
+    },
+    {
+      "usuario": 2,
+      "funcion": 2,
+      "cantidad_entradas": 3,
+      "asiento": "B7",
+      "precio_total": 30.00
+    },
+    {
+      "usuario": 3,
+      "funcion": 3,
+      "cantidad_entradas": 1,
+      "asiento": "C5",
+      "precio_total": 10.00
+    },
+    {
+      "usuario": 4,
+      "funcion": 4,
+      "cantidad_entradas": 4,
+      "asiento": "D3",
+      "precio_total": 40.00
+    },
+    {
+      "usuario": 5,
+      "funcion": 5,
+      "cantidad_entradas": 2,
+      "asiento": "E8",
+      "precio_total": 20.00
+    }
+  ]
+  

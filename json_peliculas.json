@@ -1,0 +1,53 @@
+[
+  {
+    "titulo": "Inception",
+    "duracion": 148,
+    "genero": "Sci-Fi",
+    "sinopsis": "Un ladrón especializado en robar secretos mediante el uso de la tecnología de sueños compartidos recibe una oferta para implantar una idea en la mente de un objetivo.",
+    "posters": "https://example.com/poster/inception.jpg",
+    "clasificacion": "PG-13",
+    "idioma": "Inglés",
+    "trailer": "https://example.com/trailer/inception.mp4"
+  },
+  {
+    "titulo": "The Dark Knight",
+    "duracion": 152,
+    "genero": "Acción, Crimen, Drama",
+    "sinopsis": "Batman se enfrenta al Joker, un criminal sin escrúpulos que planea sumergir a Gotham City en el caos.",
+    "posters": "https://example.com/poster/dark_knight.jpg",
+    "clasificacion": "PG-13",
+    "idioma": "Inglés",
+    "trailer": "https://example.com/trailer/dark_knight.mp4"
+  },
+  {
+    "titulo": "The Matrix",
+    "duracion": 136,
+    "genero": "Acción, Ciencia Ficción",
+    "sinopsis": "Un programador de computadoras descubre que el mundo en el que vive es una simulación creada por máquinas inteligentes para dominar a la humanidad.",
+    "posters": "https://example.com/poster/matrix.jpg",
+    "clasificacion": "R",
+    "idioma": "Inglés",
+    "trailer": "https://example.com/trailer/matrix.mp4"
+  },
+  {
+    "titulo": "Interstellar",
+    "duracion": 169,
+    "genero": "Ciencia Ficción, Drama",
+    "sinopsis": "Un grupo de astronautas viaja a través de un agujero de gusano en busca de un nuevo hogar para la humanidad.",
+    "posters": "https://example.com/poster/interstellar.jpg",
+    "clasificacion": "PG-13",
+    "idioma": "Inglés",
+    "trailer": "https://example.com/trailer/interstellar.mp4"
+  },
+  {
+    "titulo": "Avengers: Endgame",
+    "duracion": 181,
+    "genero": "Acción, Aventura, Ciencia Ficción",
+    "sinopsis": "Los Vengadores intentan revertir los efectos devastadores del chasquido de Thanos y restaurar el orden en el universo.",
+    "posters": "https://example.com/poster/endgame.jpg",
+    "clasificacion": "PG-13",
+    "idioma": "Inglés",
+    "trailer": "https://example.com/trailer/endgame.mp4"
+  }
+]
+

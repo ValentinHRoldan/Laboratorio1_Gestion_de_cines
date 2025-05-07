@@ -1,0 +1,39 @@
+
+[
+    {
+      "pelicula": 1,
+      "sala": 1,
+      "fecha": "2025-05-10",
+      "hora": "19:30:00",
+      "formato": "2D"
+    },
+    {
+      "pelicula": 2,
+      "sala": 2,
+      "fecha": "2025-05-11",
+      "hora": "21:00:00",
+      "formato": "IMAX"
+    },
+    {
+      "pelicula": 3,
+      "sala": 3,
+      "fecha": "2025-05-12",
+      "hora": "18:00:00",
+      "formato": "3D"
+    },
+    {
+      "pelicula": 4,
+      "sala": 1,
+      "fecha": "2025-05-13",
+      "hora": "14:00:00",
+      "formato": "2D"
+    },
+    {
+      "pelicula": 5,
+      "sala": 2,
+      "fecha": "2025-05-14",
+      "hora": "16:30:00",
+      "formato": "IMAX"
+    }
+  ]
+  

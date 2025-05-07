@@ -14,17 +14,17 @@ class PeliculaViewSet(viewsets.ModelViewSet):
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
 
-    def create(self, request, *args, **kwargs):
-        return Response({'detail': 'No tienes permiso para crear películas.'}, status=403)
+    # def create(self, request, *args, **kwargs):
+    #     return Response({'detail': 'No tienes permiso para crear películas.'}, status=403)
 
-    def update(self, request, *args, **kwargs):
-        return Response({'detail': 'No tienes permiso para actualizar películas.'}, status=403)
+    # def update(self, request, *args, **kwargs):
+    #     return Response({'detail': 'No tienes permiso para actualizar películas.'}, status=403)
 
-    def partial_update(self, request, *args, **kwargs):
-        return Response({'detail': 'No tienes permiso para actualizar parcialmente películas.'}, status=403)
+    # def partial_update(self, request, *args, **kwargs):
+    #     return Response({'detail': 'No tienes permiso para actualizar parcialmente películas.'}, status=403)
 
-    def destroy(self, request, *args, **kwargs):
-        return Response({'detail': 'No tienes permiso para eliminar películas.'}, status=403)
+    # def destroy(self, request, *args, **kwargs):
+    #     return Response({'detail': 'No tienes permiso para eliminar películas.'}, status=403)
 
 
 class FuncionViewSet(viewsets.ModelViewSet):
