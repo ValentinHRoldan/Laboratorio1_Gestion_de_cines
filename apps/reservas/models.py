@@ -1,6 +1,6 @@
 # Create your models here.
 from django.db import models
-from apps.usuarios.models import Usuario
+from apps.usuario.models import Usuario
 from apps.funciones.models import Funcion
 
 class Reserva(models.Model):
