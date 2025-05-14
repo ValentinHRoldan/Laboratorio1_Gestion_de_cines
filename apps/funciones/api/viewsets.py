@@ -2,7 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import PeliculaSerializer, FuncionSerializer, SalaSerializer
-from .models import Pelicula, Funcion, Sala
+from ..models import Pelicula, Funcion, Sala
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticatedOrReadOnly

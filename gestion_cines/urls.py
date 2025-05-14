@@ -16,12 +16,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .routers import router
+from rest_framework import routers
+from apps.funciones.api.viewsets import PeliculaViewSet, FuncionViewSet, SalaViewSet
+from apps.reservas.api.viewsets import ReservaViewSet
+
+# Initializar el router de DRF solo una vez
+router = routers.DefaultRouter()
+
+# Registrar un ViewSet
+router.register(prefix='pelicula', viewset=PeliculaViewSet)
+router.register(prefix='funcion', viewset=FuncionViewSet)
+router.register(prefix='sala', viewset=SalaViewSet)
+
+router.register(prefix='reserva', viewset=ReservaViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('apps.funciones.urls', namespace='funciones')),
     path('api/', include(router.urls)),
-    path('', include('apps.usuario.urls', namespace='usuario'))
+    path('', include('apps.usuario.urls', namespace='usuario')),
+    path('api/', include('apps.funciones.urls', namespace='funciones'))
 
 ]

@@ -1,7 +1,8 @@
-# from django.urls import path
-# from .api import PeliculaListaAPIView
+from django.urls import path
+from .api.views import importar_peliculas_view
 
-# app_name = 'pelicula'
-# urlpatterns = [
-#     path('api/pelicula/', PeliculaListaAPIView.as_view()),
-# ]
+app_name = 'pelicula'
+urlpatterns = [
+    path("importar-peliculas/", importar_peliculas_view),
+]
+

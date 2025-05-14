@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from .serializers import UsuarioSerializer
 from rest_framework.response import Response
-from .models import Usuario
+from ..models import Usuario
 from rest_framework import status
 
 @api_view(['POST'])
