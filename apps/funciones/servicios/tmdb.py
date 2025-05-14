@@ -1,9 +1,8 @@
-# services/tmdb.py (o donde prefieras organizarlo)
 import requests
-from ..models import Pelicula  # ajusta si tu app no se llama "peliculas"
+from ..models import Pelicula
 from decouple import config
  
-API_KEY = config("TMDB_API_KEY")  # reemplaza con tu clave
+API_KEY = config("TMDB_API_KEY") 
 BASE_URL = "https://api.themoviedb.org/3"
 IMG_URL = "https://image.tmdb.org/t/p/w500"
 
@@ -19,13 +18,13 @@ def importar_peliculas_estreno():
             Pelicula.objects.get_or_create(
                 titulo=peli["title"],
                 defaults={
-                    "duracion": 120,  # valor por defecto
-                    "genero": "Acción",  # opcional: puedes dejarlo así o mejorar luego
+                    "duracion": 120,  # valor prefedinido, despues solucionamos
+                    "genero": "Acción",  
                     "sinopsis": peli.get("overview", ""),
                     "posters": IMG_URL + peli["poster_path"] if peli.get("poster_path") else "",
-                    "clasificacion": "General",  # valor por defecto
+                    "clasificacion": "General",  # valor prefedinido, despues solucionamos
                     "idioma": peli.get("original_language", "es"),
-                    "trailer": ""  # lo dejamos vacío
+                    "trailer": ""  
                 }
             )
     else:
