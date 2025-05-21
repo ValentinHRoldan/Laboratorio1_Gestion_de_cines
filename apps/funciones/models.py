@@ -22,13 +22,20 @@ class Pelicula(models.Model):
     def __str__(self):
         return self.titulo
 
+    
+class TipoFormato(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)  # Ej: "2D", "3D", "IMAX"
+    precio = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.nombre} - ${self.precio}"
+
 class Funcion(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='funciones')
-    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name='funciones')  # ← ESTA ES LA RELACIÓN
+    sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name='funciones') 
     fecha = models.DateField()
     hora = models.TimeField()
-    formato = models.CharField(max_length=50)
+    tipo_formato = models.ForeignKey(TipoFormato, on_delete=models.PROTECT, related_name='funciones')
 
     def __str__(self):
         return f"{self.pelicula.titulo} - {self.fecha} {self.hora}"
-    
