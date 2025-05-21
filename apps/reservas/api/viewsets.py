@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ReservaSerializer
 from ..models import Reserva
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import DjangoModelPermissions
 
 
 # class PeliculaListaAPIView(APIView):
@@ -19,5 +21,7 @@ from ..models import Reserva
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ReservaViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [DjangoModelPermissions] 
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.usuario',
     'apps.reservas',
     'apps.funciones',
+    'django_filters',
     'rest_framework_simplejwt'
 ]
 
@@ -142,6 +143,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3,
+
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
     'VERSION_PARAM': 'version',
     'ALLOWED_VERSION': ['1','2'],

@@ -1,18 +1,23 @@
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import PeliculaSerializer, FuncionSerializer, SalaSerializer, TipoFormatoSerializer
 from ..models import Pelicula, Funcion, Sala, TipoFormato
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import DjangoModelPermissions
 
 
 class PeliculaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [DjangoModelPermissions] 
+
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
+
+    #FILTROS
+    filterset_class = PeliculaFilter
+
 
     # def create(self, request, *args, **kwargs):
     #     return Response({'detail': 'No tienes permiso para crear películas.'}, status=403)
@@ -28,16 +33,30 @@ class PeliculaViewSet(viewsets.ModelViewSet):
 
 
 class FuncionViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [DjangoModelPermissions] 
+    filter_backends = [filters.OrderingFilter]
+
     queryset = Funcion.objects.all()
     serializer_class = FuncionSerializer
 
+    #ORDEN
+    ordering_fields = ['fecha', 'hora']
+
 class SalaViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [DjangoModelPermissions] 
+    filter_backends = [filters.OrderingFilter]
+
     queryset = Sala.objects.all()
     serializer_class = SalaSerializer
 
-class TipoFormatoViewSet(viewsets.ModelViewSet):
-    queryset = TipoFormato.objects.all()
-    serializer_class = TipoFormatoSerializer
+    #ORDEN
+    ordering_fields = ['capacidad']
+
+    class TipoFormatoViewSet(viewsets.ModelViewSet):
+        queryset = TipoFormato.objects.all()
+        serializer_class = TipoFormatoSerializer
 
 
 #pueden ver las peliculas usuarios autenticados, no autenticados y con cualquier permiso
