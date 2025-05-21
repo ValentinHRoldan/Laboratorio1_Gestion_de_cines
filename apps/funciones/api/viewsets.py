@@ -1,8 +1,8 @@
 from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import PeliculaSerializer, FuncionSerializer, SalaSerializer
-from ..models import Pelicula, Funcion, Sala
+from .serializers import PeliculaSerializer, FuncionSerializer, SalaSerializer, TipoFormatoSerializer
+from ..models import Pelicula, Funcion, Sala, TipoFormato
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticatedOrReadOnly
@@ -35,7 +35,9 @@ class SalaViewSet(viewsets.ModelViewSet):
     queryset = Sala.objects.all()
     serializer_class = SalaSerializer
 
-
+class TipoFormatoViewSet(viewsets.ModelViewSet):
+    queryset = TipoFormato.objects.all()
+    serializer_class = TipoFormatoSerializer
 
 
 #pueden ver las peliculas usuarios autenticados, no autenticados y con cualquier permiso
