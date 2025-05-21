@@ -9,6 +9,9 @@ class Reserva(models.Model):
     cantidad_entradas = models.PositiveIntegerField()
     asiento = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ('funcion', 'asiento') #evita duplicaciones de asiento / funcion
+
     def __str__(self):
         return f"Reserva de {self.usuario.nombre} para {self.funcion}"
     
