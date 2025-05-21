@@ -6,7 +6,7 @@ from ..models import Pelicula, Funcion, Sala, TipoFormato
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions
-
+from ..filters import PeliculaFilter
 
 class PeliculaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
@@ -54,9 +54,10 @@ class SalaViewSet(viewsets.ModelViewSet):
     #ORDEN
     ordering_fields = ['capacidad']
 
-    class TipoFormatoViewSet(viewsets.ModelViewSet):
-        queryset = TipoFormato.objects.all()
-        serializer_class = TipoFormatoSerializer
+
+class TipoFormatoViewSet(viewsets.ModelViewSet):
+    queryset = TipoFormato.objects.all()
+    serializer_class = TipoFormatoSerializer
 
 
 #pueden ver las peliculas usuarios autenticados, no autenticados y con cualquier permiso
