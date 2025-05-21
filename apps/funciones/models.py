@@ -36,6 +36,7 @@ class Funcion(models.Model):
     fecha = models.DateField()
     hora = models.TimeField()
     tipo_formato = models.ForeignKey(TipoFormato, on_delete=models.PROTECT, related_name='funciones')
+    activa = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.pelicula.titulo} - {self.fecha} {self.hora}"
