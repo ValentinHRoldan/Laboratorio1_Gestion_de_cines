@@ -29,30 +29,30 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']
-        asientos = self.request.data.get('asientos', [])
         cantidad = serializer.validated_data['cantidad_entradas']
-        print(cantidad, len(asientos))
-        # Validación de función vencida
+        asiento_ids = self.request.data.get('asientos', [])
+
+        # Validar función pasada
         if funcion.fecha < timezone.now().date():
             raise ValidationError("La función ya pasó.")
 
-        # Validar que la cantidad coincida
-        if len(asientos) != cantidad:
+        # Validar cantidad de asientos
+        if len(asiento_ids) != cantidad:
             raise ValidationError("La cantidad de asientos no coincide con la cantidad de entradas.")
 
-        # Obtener objetos asiento
-        asiento_objs = Asiento.objects.filter(id__in=asientos)
+        # Obtener objetos Asiento
+        asientos = Asiento.objects.filter(id__in=asiento_ids)
 
-        # Validar que todos los asientos pertenecen a la misma sala
-        for a in asiento_objs:
-            if a.sala != funcion.sala:
-                raise ValidationError(f"El asiento {a} no pertenece a la sala de la función.")
+        if len(asientos) != cantidad:
+            raise ValidationError("Uno o más asientos no existen.")
 
-        # Verificar si ya están reservados para esa función
-        ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asiento_objs).exists()
+        # Verificar si ya están reservados
+        ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asientos).exists()
         if ocupados:
             raise ValidationError("Uno o más asientos ya están reservados para esta función.")
 
-        # Crear reserva y luego asignar los asientos
+        # Paso crítico: guardar la reserva SIN los asientos aún
         reserva = serializer.save()
-        reserva.asientos.set(asiento_objs)
+
+        # Ahora sí, ya tiene ID → podemos asignar asientos
+        reserva.asientos.set(asientos)

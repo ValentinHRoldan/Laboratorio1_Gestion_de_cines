@@ -6,10 +6,7 @@ from datetime import timedelta
 from apps.funciones.models import Asiento
 
 class ReservaSerializer(serializers.ModelSerializer):
-    asientos = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Asiento.objects.all()
-    )
+    asientos = serializers.PrimaryKeyRelatedField(queryset=Asiento.objects.all(), many=True)
     class Meta:
         model = Reserva
-        fields = '__all__'
+        fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos']
