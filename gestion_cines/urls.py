@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from apps.funciones.api.viewsets import PeliculaViewSet, FuncionViewSet, SalaViewSet, TipoFormatoViewSet
+from apps.funciones.api.viewsets import PeliculaViewSet, FuncionViewSet, SalaViewSet, TipoFormatoViewSet, AsientoViewSet
 from apps.reservas.api.viewsets import ReservaViewSet
 
 # Initializar el router de DRF solo una vez
@@ -31,6 +31,8 @@ router.register(prefix='sala', viewset=SalaViewSet)
 router.register(prefix='reserva', viewset=ReservaViewSet)
 
 router.register(prefix='tipoformato', viewset=TipoFormatoViewSet)
+
+router.register(prefix='asiento', viewset=AsientoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Pelicula, Funcion, Sala, TipoFormato
+from ..models import Pelicula, Funcion, Sala, TipoFormato, Asiento
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 from datetime import timedelta
@@ -22,4 +22,9 @@ class SalaSerializer(serializers.ModelSerializer):
 class TipoFormatoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoFormato
+        fields = '__all__'
+
+class TipoFormatoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Asiento
         fields = '__all__'

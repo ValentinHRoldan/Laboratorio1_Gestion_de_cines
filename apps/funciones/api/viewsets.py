@@ -2,7 +2,7 @@ from rest_framework import status, viewsets, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import PeliculaSerializer, FuncionSerializer, SalaSerializer, TipoFormatoSerializer
-from ..models import Pelicula, Funcion, Sala, TipoFormato
+from ..models import Pelicula, Funcion, Sala, TipoFormato, Asiento
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions
@@ -56,7 +56,15 @@ class SalaViewSet(viewsets.ModelViewSet):
 
 
 class TipoFormatoViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [DjangoModelPermissions] 
     queryset = TipoFormato.objects.all()
+    serializer_class = TipoFormatoSerializer
+
+class AsientoViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [DjangoModelPermissions] 
+    queryset = Asiento.objects.all()
     serializer_class = TipoFormatoSerializer
 
 

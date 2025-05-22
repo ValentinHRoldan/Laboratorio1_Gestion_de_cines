@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -5,8 +6,8 @@ from .serializers import ReservaSerializer
 from ..models import Reserva
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions
-
-
+from rest_framework.exceptions import ValidationError
+from apps.funciones.models import Asiento
 # class PeliculaListaAPIView(APIView):
 #     def get(self, request, format=None):
 #         categorias = Reserva.objects.all()
@@ -25,3 +26,33 @@ class ReservaViewSet(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissions] 
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
+
+    def perform_create(self, serializer):
+        funcion = serializer.validated_data['funcion']
+        asientos = self.request.data.get('asientos', [])
+        cantidad = serializer.validated_data['cantidad_entradas']
+        print(cantidad, len(asientos))
+        # Validación de función vencida
+        if funcion.fecha < timezone.now().date():
+            raise ValidationError("La función ya pasó.")
+
+        # Validar que la cantidad coincida
+        if len(asientos) != cantidad:
+            raise ValidationError("La cantidad de asientos no coincide con la cantidad de entradas.")
+
+        # Obtener objetos asiento
+        asiento_objs = Asiento.objects.filter(id__in=asientos)
+
+        # Validar que todos los asientos pertenecen a la misma sala
+        for a in asiento_objs:
+            if a.sala != funcion.sala:
+                raise ValidationError(f"El asiento {a} no pertenece a la sala de la función.")
+
+        # Verificar si ya están reservados para esa función
+        ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asiento_objs).exists()
+        if ocupados:
+            raise ValidationError("Uno o más asientos ya están reservados para esta función.")
+
+        # Crear reserva y luego asignar los asientos
+        reserva = serializer.save()
+        reserva.asientos.set(asiento_objs)
