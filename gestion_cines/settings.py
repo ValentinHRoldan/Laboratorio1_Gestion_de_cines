@@ -157,7 +157,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
     'SIGNING_KEY': SECRET_KEY, # Presente por defecto en settings
     'ALGORITHM': 'HS256', # Algoritmo de firma }
 }

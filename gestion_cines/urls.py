@@ -30,7 +30,7 @@ router.register(prefix='sala', viewset=SalaViewSet)
 
 router.register(prefix='reserva', viewset=ReservaViewSet)
 
-router.register(prefix='tipoformato', viewset=TipoFormatoViewSet)
+router.register(prefix='tipo-formato', viewset=TipoFormatoViewSet)
 
 router.register(prefix='asiento', viewset=AsientoViewSet)
 

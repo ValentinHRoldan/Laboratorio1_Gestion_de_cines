@@ -3,12 +3,11 @@ from django.db import models
 
 
 class Sala(models.Model):
-    nombre = models.CharField(max_length=100)
     capacidad = models.PositiveIntegerField()
     ubicacion = models.CharField(max_length=200)
     # asientos = models.ManyToManyField(Asiento, )
     def __str__(self):
-        return self.nombre
+        return str(self.id)
     
 class Asiento(models.Model):
     sala = models.ForeignKey(Sala, on_delete=models.CASCADE, related_name='asientos')
@@ -50,6 +49,9 @@ class Funcion(models.Model):
     hora = models.TimeField()
     tipo_formato = models.ForeignKey(TipoFormato, on_delete=models.PROTECT, related_name='funciones')
     activa = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('fecha', 'hora', 'sala', 'tipo_formato')
 
     def __str__(self):
         return f"{self.pelicula.titulo} - {self.fecha} {self.hora}"
