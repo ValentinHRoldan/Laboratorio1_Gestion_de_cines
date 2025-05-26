@@ -10,3 +10,19 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos']
+
+    def generarError(self, mensaje):
+        raise serializers.ValidationError({
+            'info': mensaje
+        })
+    
+    def validate_cantidad_entradas(self, value):
+        if value <= 0:
+            self.generarError("Cantidad de entradas minimas: 1")
+        return value
+    
+    
+    def validate(self, data):
+        if(len(data['asientos']) != data['cantidad_entradas']):
+            self.generarError("La cantidad de asientos no coincide con la cantidad de entradas.")
+        return data
