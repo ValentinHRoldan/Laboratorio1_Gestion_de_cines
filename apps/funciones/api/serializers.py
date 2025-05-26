@@ -24,7 +24,7 @@ class TipoFormatoSerializer(serializers.ModelSerializer):
         model = TipoFormato
         fields = '__all__'
 
-class TipoFormatoSerializer(serializers.ModelSerializer):
+class AsientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asiento
         fields = '__all__'

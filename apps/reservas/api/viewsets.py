@@ -30,29 +30,40 @@ class ReservaViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']
         cantidad = serializer.validated_data['cantidad_entradas']
-        asiento_ids = self.request.data.get('asientos', [])
 
-        # Validar función pasada
+        # Obtener lista de IDs de asientos desde el request (esperado como lista)
+        asiento_ids = self.request.POST.getlist('asientos')
+        if not asiento_ids:
+            raise ValidationError("Debes seleccionar al menos un asiento.")
+
+        # Validación: función no puede estar en el pasado
         if funcion.fecha < timezone.now().date():
             raise ValidationError("La función ya pasó.")
 
-        # Validar cantidad de asientos
+        # Validar cantidad de entradas coincida con cantidad de asientos
         if len(asiento_ids) != cantidad:
             raise ValidationError("La cantidad de asientos no coincide con la cantidad de entradas.")
 
         # Obtener objetos Asiento
         asientos = Asiento.objects.filter(id__in=asiento_ids)
 
-        if len(asientos) != cantidad:
+        # Validar que existan todos los asientos solicitados
+        if asientos.count() != cantidad:
             raise ValidationError("Uno o más asientos no existen.")
+        
+        sala = funcion.sala
+        asientos_validos_en_sala = sala.asientos.filter(id__in=asiento_ids)
+        if asientos_validos_en_sala.count() != cantidad:
+            raise ValidationError("Uno o más asientos no pertenecen a la sala asignada a esta función.")
 
-        # Verificar si ya están reservados
+        # Verificar si alguno de esos asientos ya está reservado para esa función
         ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asientos).exists()
         if ocupados:
             raise ValidationError("Uno o más asientos ya están reservados para esta función.")
 
-        # Paso crítico: guardar la reserva SIN los asientos aún
+        # Guardar reserva sin asignar aún los asientos
         reserva = serializer.save()
 
-        # Ahora sí, ya tiene ID → podemos asignar asientos
+        # Asociar los asientos a la reserva (ya existe ID)
         reserva.asientos.set(asientos)
+        print(reserva.precio_total)

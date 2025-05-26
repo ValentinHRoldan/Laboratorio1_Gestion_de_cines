@@ -1,7 +1,7 @@
 from rest_framework import status, viewsets, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import PeliculaSerializer, FuncionSerializer, SalaSerializer, TipoFormatoSerializer
+from .serializers import AsientoSerializer, PeliculaSerializer, FuncionSerializer, SalaSerializer, TipoFormatoSerializer
 from ..models import Pelicula, Funcion, Sala, TipoFormato, Asiento
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -65,7 +65,7 @@ class AsientoViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [DjangoModelPermissions] 
     queryset = Asiento.objects.all()
-    serializer_class = TipoFormatoSerializer
+    serializer_class = AsientoSerializer
 
 
 #pueden ver las peliculas usuarios autenticados, no autenticados y con cualquier permiso

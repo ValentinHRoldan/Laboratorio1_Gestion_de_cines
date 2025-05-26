@@ -15,4 +15,5 @@ class Reserva(models.Model):
     
     @property
     def precio_total(self):
-        return self.cantidad_entradas * self.funcion.precio_unitario
+        precio_unitario = self.funcion.tipo_formato.precio
+        return self.cantidad_entradas * precio_unitario
