@@ -36,6 +36,8 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if funcion.fecha < timezone.now().date():
             raise ValidationError("La función ya pasó.")
 
+        if cantidad <= 0:
+            raise ValidationError("Cantidad de entradas minimas: 1")
         # Validar cantidad de asientos
         if len(asiento_ids) != cantidad:
             raise ValidationError("La cantidad de asientos no coincide con la cantidad de entradas.")
