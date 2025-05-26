@@ -5,7 +5,7 @@ from django.db import models
 class Sala(models.Model):
     capacidad = models.PositiveIntegerField()
     ubicacion = models.CharField(max_length=200)
-    # asientos = models.ManyToManyField(Asiento, )
+
     def __str__(self):
         return str(self.id)
     
