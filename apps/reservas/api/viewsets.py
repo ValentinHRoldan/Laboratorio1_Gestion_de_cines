@@ -30,23 +30,18 @@ class ReservaViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']
         cantidad = serializer.validated_data['cantidad_entradas']
-        asiento_ids = self.request.data.get('asientos', [])
+        asiento_ids = self.request.POST.getlist('asientos')
 
         # Validar función pasada
         if funcion.fecha < timezone.now().date():
             raise ValidationError("La función ya pasó.")
 
-        # if cantidad <= 0:
-        #     raise ValidationError("Cantidad de entradas minimas: 1")
-        # Validar cantidad de asientos
-        # if len(asiento_ids) != cantidad:
-        #     raise ValidationError("La cantidad de asientos no coincide con la cantidad de entradas.")
 
-        # Obtener objetos Asiento
         asientos = Asiento.objects.filter(id__in=asiento_ids)
-
-        if len(asientos) != cantidad:
-            raise ValidationError("Uno o más asientos no existen.")
+        print(asientos,len(asientos),type(len(asientos)),asiento_ids)
+        for asiento in asientos:
+            if asiento.sala != funcion.sala:
+                raise ValidationError(f"El asiento {asiento.fila}{asiento.numero} no pertenece a la sala de la función.")
 
         # Verificar si ya están reservados
         ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asientos).exists()
