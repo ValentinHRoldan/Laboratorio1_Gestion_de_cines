@@ -26,7 +26,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissions] 
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
-
+    
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']
         cantidad = serializer.validated_data['cantidad_entradas']
@@ -58,3 +58,4 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
         # Ahora sí, ya tiene ID → podemos asignar asientos
         reserva.asientos.set(asientos)
+        print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)
