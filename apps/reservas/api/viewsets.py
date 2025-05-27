@@ -29,13 +29,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']
-        cantidad = serializer.validated_data['cantidad_entradas']
         asiento_ids = self.request.POST.getlist('asientos')
-
-        # Validar función pasada
-        if funcion.fecha < timezone.now().date():
-            raise ValidationError("La función ya pasó.")
-
 
         asientos = Asiento.objects.filter(id__in=asiento_ids)
         print(asientos,len(asientos),type(len(asientos)),asiento_ids)

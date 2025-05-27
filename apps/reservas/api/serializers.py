@@ -21,7 +21,12 @@ class ReservaSerializer(serializers.ModelSerializer):
             self.generarError("Cantidad de entradas minimas: 1")
         return value
     
-    
+    def validate_funcion(self, value):
+        print(value.fecha)
+        if value.fecha < timezone.now().date():
+            self.generarError("La función ya pasó.")
+        return value
+
     def validate(self, data):
         if(len(data['asientos']) != data['cantidad_entradas']):
             self.generarError("La cantidad de asientos no coincide con la cantidad de entradas.")
