@@ -8,6 +8,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.exceptions import ValidationError
 from apps.funciones.models import Asiento
+from apps.reservas.models import AsientoReservado
 # class PeliculaListaAPIView(APIView):
 #     def get(self, request, format=None):
 #         categorias = Reserva.objects.all()
@@ -21,30 +22,70 @@ from apps.funciones.models import Asiento
 #             return Response(serializer.data, status=status.HTTP_201_CREATED)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class ReservaViewSet(viewsets.ModelViewSet):
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = [DjangoModelPermissions] 
+#     queryset = Reserva.objects.all()
+#     serializer_class = ReservaSerializer
+    
+#     # def perform_create(self, serializer):
+#     #     funcion = serializer.validated_data['funcion']
+#     #     asiento_ids = self.request.POST.getlist('asientos')
+
+#     #     asientos = Asiento.objects.filter(id__in=asiento_ids)
+#     #     print(asientos,len(asientos),type(len(asientos)),asiento_ids)
+#     #     for asiento in asientos:
+#     #         if asiento.sala != funcion.sala:
+#     #             raise ValidationError(f"El asiento {asiento.fila}{asiento.numero} no pertenece a la sala de la función.")
+
+#     #     # Verificar si ya están reservados
+#     #     ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asientos).exists()
+#     #     if ocupados:
+#     #         raise ValidationError("Uno o más asientos ya están reservados para esta función.")
+
+#     #     # Paso crítico: guardar la reserva SIN los asientos aún
+#     #     reserva = serializer.save()
+
+#     #     # Ahora sí, ya tiene ID → podemos asignar asientos
+#     #     reserva.asientos.set(asientos)
+#     #     print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)
+
 class ReservaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [DjangoModelPermissions] 
+    permission_classes = [DjangoModelPermissions]
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
-    
+
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']
-        asiento_ids = self.request.POST.getlist('asientos')
+        asiento_ids = self.request.data.get('asientos', [])
+        # desde el frontend envías una lista de IDs
 
         asientos = Asiento.objects.filter(id__in=asiento_ids)
-        print(asientos,len(asientos),type(len(asientos)),asiento_ids)
+
+        # Validar que los asientos pertenecen a la sala de la función
         for asiento in asientos:
             if asiento.sala != funcion.sala:
-                raise ValidationError(f"El asiento {asiento.fila}{asiento.numero} no pertenece a la sala de la función.")
+                raise ValidationError(
+                    f"El asiento {asiento.fila}{asiento.numero} no pertenece a la sala de la función."
+                )
 
-        # Verificar si ya están reservados
-        ocupados = Reserva.objects.filter(funcion=funcion, asientos__in=asientos).exists()
-        if ocupados:
-            raise ValidationError("Uno o más asientos ya están reservados para esta función.")
+        # Verificar si ya están reservados para esta función
+        for asiento in asientos:
+            if AsientoReservado.objects.filter(asiento=asiento, funcion=funcion).exists():
+                raise ValidationError(
+                    f"El asiento {asiento.fila}{asiento.numero} ya está reservado para esta función."
+                )
 
-        # Paso crítico: guardar la reserva SIN los asientos aún
+        # Guardar la reserva
         reserva = serializer.save()
 
-        # Ahora sí, ya tiene ID → podemos asignar asientos
-        reserva.asientos.set(asientos)
+        # Crear las instancias de AsientoReservado
+        for asiento in asientos:
+            AsientoReservado.objects.create(
+                reserva=reserva,
+                asiento=asiento,
+                funcion=funcion
+            )
+
         print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)

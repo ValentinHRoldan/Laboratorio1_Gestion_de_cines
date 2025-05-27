@@ -6,7 +6,10 @@ from datetime import timedelta
 from apps.funciones.models import Asiento
 
 class ReservaSerializer(serializers.ModelSerializer):
-    asientos = serializers.PrimaryKeyRelatedField(queryset=Asiento.objects.all(), many=True)
+    asientos = serializers.ListField(
+        child=serializers.IntegerField(), write_only=True
+    )
+
     class Meta:
         model = Reserva
         fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos']
@@ -22,7 +25,6 @@ class ReservaSerializer(serializers.ModelSerializer):
         return value
     
     def validate_funcion(self, value):
-        print(value.fecha)
         if value.fecha < timezone.now().date():
             self.generarError("La función ya pasó.")
         return value
@@ -31,3 +33,13 @@ class ReservaSerializer(serializers.ModelSerializer):
         if(len(data['asientos']) != data['cantidad_entradas']):
             self.generarError("La cantidad de asientos no coincide con la cantidad de entradas.")
         return data
+    
+    def create(self, validated_data):
+        asiento_ids = validated_data.pop('asientos')  # Sacamos los asientos
+
+        # Creamos la reserva sin los asientos
+        reserva = Reserva.objects.create(**validated_data)
+
+        # Los devolvemos para que perform_create los procese
+        self.context['asiento_ids'] = asiento_ids
+        return reserva
