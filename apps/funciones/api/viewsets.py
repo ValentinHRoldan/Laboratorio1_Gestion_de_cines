@@ -7,6 +7,8 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import DjangoModelPermissions
 from ..filters import PeliculaFilter
+from rest_framework.decorators import action
+from apps.reservas.models import AsientoReservado
 
 class PeliculaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
@@ -42,6 +44,26 @@ class FuncionViewSet(viewsets.ModelViewSet):
 
     #ORDEN
     ordering_fields = ['fecha', 'hora']
+
+    @action(detail=True, methods=['get'])
+    def disponibilidad(self, request, pk=None):
+        funcion = self.get_object()
+        serializer = FuncionSerializer(funcion)
+        # Todos los asientos
+        todos_asientos = Asiento.objects.all()
+
+        # Asientos reservados en esta función
+        asientos_reservados = AsientoReservado.objects.filter(funcion=funcion).values_list('asiento_id', flat=True)
+
+        # Asientos que NO están reservados
+        asientos_disponibles = todos_asientos.exclude(id__in=asientos_reservados)
+
+        asientos_data = [{'id': asiento.id, 'numero': asiento.numero} for asiento in asientos_disponibles]
+
+        return Response({
+            'Funcion': serializer.data,
+            'asientos_disponibles': asientos_data
+        })
 
 class SalaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
