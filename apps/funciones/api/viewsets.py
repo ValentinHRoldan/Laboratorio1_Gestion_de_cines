@@ -54,11 +54,10 @@ class FuncionViewSet(viewsets.ModelViewSet):
 
         # Asientos reservados en esta función
         asientos_reservados = AsientoReservado.objects.filter(funcion=funcion).values_list('asiento_id', flat=True)
-
         # Asientos que NO están reservados
         asientos_disponibles = todos_asientos.exclude(id__in=asientos_reservados)
 
-        asientos_data = [{'id': asiento.id, 'numero': asiento.numero} for asiento in asientos_disponibles]
+        asientos_data = [{'id': asiento.id, 'numero': asiento.numero, 'fila': asiento.fila} for asiento in asientos_disponibles]
 
         return Response({
             'Funcion': serializer.data,
