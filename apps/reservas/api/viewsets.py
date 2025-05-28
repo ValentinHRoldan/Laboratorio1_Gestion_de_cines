@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from .serializers import ReservaSerializer
 from ..models import Reserva
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.exceptions import ValidationError
 from apps.funciones.models import Asiento
 from apps.reservas.models import AsientoReservado
+from gestion_cines.permisos import DjangoModelPermissionsWithView
 # class PeliculaListaAPIView(APIView):
 #     def get(self, request, format=None):
 #         categorias = Reserva.objects.all()
@@ -49,12 +50,23 @@ from apps.reservas.models import AsientoReservado
 #     #     # Ahora sí, ya tiene ID → podemos asignar asientos
 #     #     reserva.asientos.set(asientos)
 #     #     print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)
+from rest_framework.permissions import BasePermission
+
+class TienePermisoVerReserva(BasePermission):
+    def has_permission(self, request, view):
+        print("Método:", request.method)
+        return request.user.has_perm('reservas.view_reserva')
+
 
 class ReservaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [DjangoModelPermissionsWithView]
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
+
+    def list(self, request, *args, **kwargs):
+        print("Permisos activos del usuario:", request.user.get_all_permissions())
+        return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         funcion = serializer.validated_data['funcion']

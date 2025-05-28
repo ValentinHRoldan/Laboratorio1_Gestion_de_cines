@@ -9,10 +9,11 @@ from rest_framework.permissions import DjangoModelPermissions
 from ..filters import PeliculaFilter
 from rest_framework.decorators import action
 from apps.reservas.models import AsientoReservado
+from gestion_cines.permisos import DjangoModelPermissionsWithView
 
 class PeliculaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [DjangoModelPermissions] 
+    permission_classes = [DjangoModelPermissionsWithView] 
 
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
@@ -66,7 +67,7 @@ class FuncionViewSet(viewsets.ModelViewSet):
 
 class SalaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [DjangoModelPermissions] 
+    permission_classes = [DjangoModelPermissionsWithView] 
     filter_backends = [filters.OrderingFilter]
 
     queryset = Sala.objects.all()
@@ -78,13 +79,13 @@ class SalaViewSet(viewsets.ModelViewSet):
 
 class TipoFormatoViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [DjangoModelPermissions] 
+    permission_classes = [DjangoModelPermissionsWithView] 
     queryset = TipoFormato.objects.all()
     serializer_class = TipoFormatoSerializer
 
 class AsientoViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [DjangoModelPermissions] 
+    permission_classes = [DjangoModelPermissionsWithView] 
     queryset = Asiento.objects.all()
     serializer_class = AsientoSerializer
 
