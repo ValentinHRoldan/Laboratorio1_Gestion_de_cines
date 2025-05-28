@@ -15,6 +15,17 @@ class UsuarioSerializer(serializers.ModelSerializer):
         except ValueError:
             self.generarError("Documento invalido")
         return value
+    
+    def validate_email(self, value):
+        if Usuario.objects.filter(email = value).exists():
+            self.generarError("El email ya está en uso")
+        return value
+
+    def validate_password(self, value):
+        if len(value) < 8:
+            self.generarError("La contraseña debe contener minimo 8 caracteres")
+        return value
+    
     def validate(self, data):
         if data['password'] != data['password_confirmation']:
             self.generarError('Las contraseñas no coinciden')

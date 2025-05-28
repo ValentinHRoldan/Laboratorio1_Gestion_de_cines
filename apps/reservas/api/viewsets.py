@@ -50,13 +50,6 @@ from gestion_cines.permisos import DjangoModelPermissionsWithView
 #     #     # Ahora sí, ya tiene ID → podemos asignar asientos
 #     #     reserva.asientos.set(asientos)
 #     #     print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)
-from rest_framework.permissions import BasePermission
-
-class TienePermisoVerReserva(BasePermission):
-    def has_permission(self, request, view):
-        print("Método:", request.method)
-        return request.user.has_perm('reservas.view_reserva')
-
 
 class ReservaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
