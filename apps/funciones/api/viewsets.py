@@ -46,6 +46,13 @@ class FuncionViewSet(viewsets.ModelViewSet):
     #ORDEN
     ordering_fields = ['fecha', 'hora']
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Funcion.objects.all()
+        else:
+            return Funcion.objects.filter(activa=True)
+
     @action(detail=True, methods=['get'])
     def disponibilidad(self, request, pk=None):
         funcion = self.get_object()
