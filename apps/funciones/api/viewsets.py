@@ -58,7 +58,7 @@ class FuncionViewSet(viewsets.ModelViewSet):
         funcion = self.get_object()
         serializer = FuncionSerializer(funcion)
         # Todos los asientos
-        todos_asientos = Asiento.objects.all()
+        todos_asientos = funcion.sala.asientos.all()
 
         # Asientos reservados en esta función
         asientos_reservados = AsientoReservado.objects.filter(funcion=funcion).values_list('asiento_id', flat=True)
