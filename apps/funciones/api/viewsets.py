@@ -68,7 +68,7 @@ class SalaViewSet(viewsets.ModelViewSet):
     serializer_class = SalaSerializer
 
     #ORDEN
-    ordering_fields = ['capacidad']
+    ordering_fields = ['capacidad', 'id']
 
 
 class TipoFormatoViewSet(viewsets.ModelViewSet):

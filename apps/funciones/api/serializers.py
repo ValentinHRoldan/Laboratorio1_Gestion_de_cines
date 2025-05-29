@@ -65,6 +65,6 @@ class FuncionSerializer(serializers.ModelSerializer):
         validated_data['pelicula'] = validated_data.pop('pelicula_id')
         validated_data['tipo_formato'] = validated_data.pop('tipo_formato_id')
         validated_data['sala'] = validated_data.pop('sala_id')
-        validated_data['activa'] = True  # si es parte del modelo
+        validated_data['activa'] = True
         return super().create(validated_data)
 
