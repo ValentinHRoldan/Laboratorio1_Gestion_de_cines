@@ -1,19 +1,29 @@
 from rest_framework import serializers
-from ..models import Reserva
+from ..models import Reserva, AsientoReservado
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 from datetime import timedelta
 from apps.funciones.models import Asiento
+from apps.funciones.api.serializers import AsientoSerializer, FuncionSerializer
+from apps.usuario.api.serializers import UsuarioSerializer
+
+class AsientoReservadoSerializer(serializers.ModelSerializer):
+    asiento = AsientoSerializer(read_only=True)
+    class Meta:
+        model = AsientoReservado
+        fields = ['id', 'asiento', 'funcion']
 
 class ReservaSerializer(serializers.ModelSerializer):
     asientos = serializers.ListField(
         child=serializers.IntegerField(), write_only=True
     )
-
+    asientos_reservados = AsientoReservadoSerializer(many=True, read_only=True)
+    funcion = FuncionSerializer(read_only = True)
+    usuario = UsuarioSerializer(read_only = True)
     class Meta:
         model = Reserva
-        fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos']
-        read_only_fields = ['usuario']
+        fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos', 'asientos_reservados', 'precio_total']
+        read_only_fields = ['usuario', 'asientos_reservados', 'precio_total']
 
     def generarError(self, mensaje):
         raise serializers.ValidationError({
@@ -36,11 +46,13 @@ class ReservaSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
-        asiento_ids = validated_data.pop('asientos')  # Sacamos los asientos
+        #sacamos los asientos 
+        asiento_ids = validated_data.pop('asientos')  
         
-        # Creamos la reserva sin los asientos
+        #se crea la reserva sin los asientos
         reserva = Reserva.objects.create(**validated_data)
 
-        # Los devolvemos para que perform_create los procese
+        #se los devuelve al perform_create para que los procese
         self.context['asiento_ids'] = asiento_ids
         return reserva
+    

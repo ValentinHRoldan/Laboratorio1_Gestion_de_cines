@@ -1,0 +1,12 @@
+[
+    { "sala": 1, "fila": "A", "numero": 1 },
+    { "sala": 1, "fila": "A", "numero": 2 },
+    { "sala": 1, "fila": "A", "numero": 3 },
+    { "sala": 1, "fila": "A", "numero": 4 },
+    { "sala": 1, "fila": "A", "numero": 5 },
+    { "sala": 1, "fila": "B", "numero": 1 },
+    { "sala": 1, "fila": "B", "numero": 2 },
+    { "sala": 1, "fila": "B", "numero": 3 },
+    { "sala": 1, "fila": "B", "numero": 4 },
+    { "sala": 1, "fila": "B", "numero": 5 }
+  ]
