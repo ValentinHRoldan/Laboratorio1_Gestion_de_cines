@@ -18,7 +18,7 @@ class TipoFormatoSerializer(serializers.ModelSerializer):
 class AsientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asiento
-        fields = ['id', 'fila', 'numero']
+        fields = ['id', 'fila', 'numero', 'sala']
 
 class SalaSerializer(serializers.ModelSerializer):
     asientos = AsientoSerializer(many=True, read_only=True)
@@ -28,12 +28,28 @@ class SalaSerializer(serializers.ModelSerializer):
 
 class FuncionSerializer(serializers.ModelSerializer):
     pelicula = PeliculaSerializer(read_only=True)
-    sala = SalaSerializer(read_only=True)
     tipo_formato = TipoFormatoSerializer(read_only=True)
+    sala = SalaSerializer(read_only=True)
+
+    pelicula_id = serializers.PrimaryKeyRelatedField(
+        queryset=Pelicula.objects.all(), write_only=True
+    )
+    tipo_formato_id = serializers.PrimaryKeyRelatedField(
+        queryset=TipoFormato.objects.all(), write_only=True
+    )
+    sala_id = serializers.PrimaryKeyRelatedField(
+        queryset=Sala.objects.all(), write_only=True
+    )
+
     class Meta:
         model = Funcion
-        fields = ['id', 'pelicula', 'sala', 'fecha', 'hora', 'tipo_formato']
-
+        fields = [
+            'id',
+            'pelicula', 'pelicula_id',
+            'tipo_formato', 'tipo_formato_id',
+            'sala', 'sala_id',
+            'fecha', 'hora'
+        ]
 
     def generarError(self, mensaje):
         raise serializers.ValidationError({
@@ -42,10 +58,13 @@ class FuncionSerializer(serializers.ModelSerializer):
 
     def validate_fecha(self, value):
         if value < date.today():
-            self.generarError('la fecha no puede ser anterior a la actual')
+            self.generarError('La fecha no puede ser anterior a la actual')
         return value
 
     def create(self, validated_data):
-        validated_data['activa'] = True
+        validated_data['pelicula'] = validated_data.pop('pelicula_id')
+        validated_data['tipo_formato'] = validated_data.pop('tipo_formato_id')
+        validated_data['sala'] = validated_data.pop('sala_id')
+        validated_data['activa'] = True  # si es parte del modelo
         return super().create(validated_data)
 

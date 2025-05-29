@@ -22,7 +22,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if user.is_superuser:
             return Reserva.objects.all()
         else:
-            return Reserva.objects.filter(id=user.id)
+            return Reserva.objects.filter(usuario_id=user.id)
         
     def list(self, request, *args, **kwargs):
         print("Permisos activos del usuario:", request.user.get_all_permissions())
@@ -30,7 +30,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         usuario = self.request.user
-        funcion = serializer.validated_data['funcion']
+        funcion = serializer.validated_data['funcion_id']
         asiento_ids = self.request.data.get('asientos', [])
         # desde el postman se envía una lista de IDs
 

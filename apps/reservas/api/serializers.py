@@ -3,7 +3,7 @@ from ..models import Reserva, AsientoReservado
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 from datetime import timedelta
-from apps.funciones.models import Asiento
+from apps.funciones.models import Asiento, Funcion
 from apps.funciones.api.serializers import AsientoSerializer, FuncionSerializer
 from apps.usuario.api.serializers import UsuarioSerializer
 
@@ -19,10 +19,13 @@ class ReservaSerializer(serializers.ModelSerializer):
     )
     asientos_reservados = AsientoReservadoSerializer(many=True, read_only=True)
     funcion = FuncionSerializer(read_only = True)
+    funcion_id = serializers.PrimaryKeyRelatedField(
+        queryset=Funcion.objects.all(), write_only=True  # Para POST
+    )
     usuario = UsuarioSerializer(read_only = True)
     class Meta:
         model = Reserva
-        fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos', 'asientos_reservados', 'precio_total']
+        fields = ['id', 'usuario', 'funcion', 'funcion_id', 'cantidad_entradas', 'asientos', 'asientos_reservados', 'precio_total']
         read_only_fields = ['usuario', 'asientos_reservados', 'precio_total']
 
     def generarError(self, mensaje):
@@ -46,6 +49,8 @@ class ReservaSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
+        funcion = validated_data.pop('funcion_id')
+        validated_data['funcion'] = funcion
         #sacamos los asientos 
         asiento_ids = validated_data.pop('asientos')  
         
