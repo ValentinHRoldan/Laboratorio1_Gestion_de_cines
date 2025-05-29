@@ -13,6 +13,7 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = ['id', 'usuario', 'funcion', 'cantidad_entradas', 'asientos']
+        read_only_fields = ['usuario']
 
     def generarError(self, mensaje):
         raise serializers.ValidationError({
@@ -36,7 +37,7 @@ class ReservaSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         asiento_ids = validated_data.pop('asientos')  # Sacamos los asientos
-
+        
         # Creamos la reserva sin los asientos
         reserva = Reserva.objects.create(**validated_data)
 
