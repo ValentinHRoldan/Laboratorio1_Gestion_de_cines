@@ -62,6 +62,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
+        usuario = self.request.user
         funcion = serializer.validated_data['funcion']
         asiento_ids = self.request.data.get('asientos', [])
         # desde el frontend envías una lista de IDs
@@ -83,7 +84,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
                 )
 
         # Guardar la reserva
-        reserva = serializer.save()
+        reserva = serializer.save(usuario=usuario)
 
         # Crear las instancias de AsientoReservado
         for asiento in asientos:
