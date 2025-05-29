@@ -1,28 +1,6 @@
 [
-    {
-      "nombre": "Sala 1",
-      "capacidad": 150,
-      "ubicacion": "Piso 1 - A"
-    },
-    {
-      "nombre": "Sala 2",
-      "capacidad": 200,
-      "ubicacion": "Piso 1 - B"
-    },
-    {
-      "nombre": "Sala 3",
-      "capacidad": 100,
-      "ubicacion": "Piso 2 - A"
-    },
-    {
-      "nombre": "Sala 4",
-      "capacidad": 120,
-      "ubicacion": "Piso 2 - B"
-    },
-    {
-      "nombre": "Sala 5",
-      "capacidad": 180,
-      "ubicacion": "Piso 3 - A"
-    }
-  ]
+  { "capacidad": 100, "ubicacion": "PRIMER PISO" },
+  { "capacidad": 80, "ubicacion": "SEGUNDO PISO" },
+  { "capacidad": 120, "ubicacion": "PRIMER PISO" }
+]
   
