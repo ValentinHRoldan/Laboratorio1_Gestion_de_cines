@@ -1,16 +1,15 @@
 # Laboratorio1_Gestion_de_cines
-# 🎬 Laboratorio1_Gestion_de_cines
 
 Proyecto desarrollado en Django REST Framework que simula un sistema de gestión de cines. Permite a los usuarios consultar funciones disponibles, reservar entradas y gestionar salas, películas y horarios. Está enfocado en la implementación de una API RESTful para el manejo de recursos relacionados con la cartelera de cine.
 
-## 🚀 Descripción general
+## Descripción general
 
 Este sistema permite:
 
 - Registrar funciones de películas en salas específicas.
 - Consultar películas, salas, tipos de formato y horarios disponibles.
 - Permitir que un usuario realice una reserva indicando función, cantidad de entradas y asientos.
-- Registrar asientos reservados y calcular el precio total.
+- Registrar asientos y calcular el precio total.
 - Validar que los asientos seleccionados no estén ocupados.
 - Garantizar la integridad de los datos mediante validaciones personalizadas.
 
@@ -28,7 +27,7 @@ Este sistema permite:
 
 ###  Tipo de Formato (`TipoFormato`)
 - `nombre`: Nombre del formato (2D, 3D, IMAX, etc).
-- `precio_adicional`: Costo extra según el tipo de formato.
+- `precio`: Costo extra según el tipo de formato.
 
 ###  Función (`Funcion`)
 - `pelicula`: Película proyectada.
@@ -64,7 +63,7 @@ Este sistema permite:
 - `GET /api/sala/` — Consulta de salas disponibles.
 - `GET /api/tipo-formato/` — Consulta de tipos de formato.
 
-### 🔸 Requisitos para POST `/api/reservas/`
+### Requisitos para POST `/api/reservas/`
 
 ```json
 {
