@@ -37,7 +37,7 @@ class Pelicula(models.Model):
     
 class TipoFormato(models.Model):
     nombre = models.CharField(max_length=50, unique=True)  # Ej: "2D", "3D", "IMAX"
-    precio = models.DecimalField(max_digits=6, decimal_places=2)
+    precio = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"
