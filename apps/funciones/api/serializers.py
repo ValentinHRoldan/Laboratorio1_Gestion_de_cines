@@ -13,7 +13,7 @@ class PeliculaSerializer(serializers.ModelSerializer):
 class FuncionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Funcion
-        fields = ['id', 'pelicula', 'sala', 'fecha', 'hora', 'tipo_formato', 'activa']
+        fields = ['id', 'pelicula', 'sala', 'fecha', 'hora', 'tipo_formato']
 
 
     def generarError(self, mensaje):

@@ -145,14 +145,14 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 3,
+    'PAGE_SIZE': 5,
 
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
     'VERSION_PARAM': 'version',
     'ALLOWED_VERSION': ['1','2'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication', 
-        'rest_framework.authentication.SessionAuthentication',  
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
