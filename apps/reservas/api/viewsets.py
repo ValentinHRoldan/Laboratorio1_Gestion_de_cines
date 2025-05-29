@@ -65,25 +65,25 @@ class ReservaViewSet(viewsets.ModelViewSet):
         usuario = self.request.user
         funcion = serializer.validated_data['funcion']
         asiento_ids = self.request.data.get('asientos', [])
-        # desde el frontend envías una lista de IDs
+        # desde el postman se envía una lista de IDs
 
         asientos = Asiento.objects.filter(id__in=asiento_ids)
 
-        # Validar que los asientos pertenecen a la sala de la función
+        #validar los asientos que pertenecen a la sala de la función
         for asiento in asientos:
             if asiento.sala != funcion.sala:
                 raise ValidationError(
                     f"El asiento {asiento.fila}{asiento.numero} no pertenece a la sala de la función."
                 )
 
-        # Verificar si ya están reservados para esta función
+        #se verifica si los asientos ya estan reservados para esta funcion
         for asiento in asientos:
             if AsientoReservado.objects.filter(asiento=asiento, funcion=funcion).exists():
                 raise ValidationError(
                     f"El asiento {asiento.fila}{asiento.numero} ya está reservado para esta función."
                 )
 
-        # Guardar la reserva
+        #se guarda la reserva
         reserva = serializer.save(usuario=usuario)
 
         # Crear las instancias de AsientoReservado
