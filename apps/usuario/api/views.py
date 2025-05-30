@@ -13,7 +13,7 @@ def register(request):
     if serializer.is_valid():
         user = serializer.save()
 
-        # Agregar usuario al grupo por defecto
+        #agregar usuario al grupo creado
         try:
             grupo = Group.objects.get(name="usuarios_registrados")
             user.groups.add(grupo)

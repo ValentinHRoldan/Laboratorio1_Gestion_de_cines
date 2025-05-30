@@ -53,6 +53,14 @@ Este sistema permite:
 - `asiento`: Asiento específico.
 - `funcion`: Función a la que corresponde.
 
+###  Usuario
+- `Nombre`: Nombre del usuario.
+- `Apellido`: Apellido del usuario.
+- `Documento`: DNI del usuario.
+- `Email`: Correo del usuario.
+- `Username`: Nombre de usuario del usuario.
+- `Contraseña`: Contraseña del usuario.
+
 ##  Requisitos del API
 
 ###  Endpoints
