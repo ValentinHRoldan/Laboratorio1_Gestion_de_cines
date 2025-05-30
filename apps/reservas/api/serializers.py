@@ -38,7 +38,7 @@ class ReservaSerializer(serializers.ModelSerializer):
             self.generarError("Cantidad de entradas minimas: 1")
         return value
     
-    def validate_funcion(self, value):
+    def validate_funcion_id(self, value):
         if value.fecha < timezone.now().date():
             self.generarError("La función ya pasó.")
         return value
