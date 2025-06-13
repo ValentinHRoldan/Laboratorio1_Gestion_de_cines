@@ -1,6 +1,5 @@
 import pytest
 from .fixtures_user import get_authenticated_client, get_user_generico, api_client, api_client
-from .fixtures_categoria import get_categorias
 from ..models import Categoria
 
 

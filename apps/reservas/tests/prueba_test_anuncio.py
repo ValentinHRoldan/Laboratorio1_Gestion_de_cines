@@ -1,7 +1,5 @@
 import pytest
 from .fixtures_user import get_authenticated_client, get_user_generico, api_client, api_client
-from .fixtures_categoria import get_categoria
-from .fixtures_anuncio import get_anuncio, get_user_generico_anuncio
 from ..models import Anuncio, OfertaAnuncio
 from apps.usuario.models import Usuario
 

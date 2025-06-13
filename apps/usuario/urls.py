@@ -6,7 +6,7 @@ from .api.views import register
 app_name = "usuario"
 
 urlpatterns = [
-    path('api/login/', TokenObtainPairView.as_view()),
+    path('api/login/', TokenObtainPairView.as_view(), name='login'),
     path('api/login/refresh/', TokenRefreshView.as_view()),
-    path('api/register/', register)
+    path('api/register/', register, name='register')
  ]
