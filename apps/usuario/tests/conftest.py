@@ -72,11 +72,12 @@ def create_user(test_password, grupo_usuarios_registrados):
 def create_superuser(test_password):
     User = get_user_model()
     user = User.objects.create_user(
-        username="testsuperuser",
+        username="testuser",
+        nombre="nombretest",
+        apellido="apellidotest",
         password=test_password,
-        documento_identidad="87654321",
-        domicilio="Calle Falsa 123",
-        email="testsup@example.com",
+        documento="12345678",
+        email="email@test.com",
         is_superuser = True
     )
     return user
