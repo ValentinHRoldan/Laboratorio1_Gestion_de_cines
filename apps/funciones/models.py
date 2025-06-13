@@ -3,7 +3,6 @@ from django.db import models
 
 
 class Sala(models.Model):
-    capacidad = models.PositiveIntegerField()
     ubicacion = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
