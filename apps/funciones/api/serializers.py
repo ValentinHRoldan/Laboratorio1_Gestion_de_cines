@@ -24,7 +24,7 @@ class SalaSerializer(serializers.ModelSerializer):
     asientos = AsientoSerializer(many=True, read_only=True)
     class Meta:
         model = Sala
-        fields = ['id','capacidad', 'ubicacion', 'asientos']
+        fields = ['id', 'ubicacion', 'asientos']
 
 class FuncionSerializer(serializers.ModelSerializer):
     pelicula = PeliculaSerializer(read_only=True)
