@@ -4,7 +4,7 @@ import pytest
 from apps.funciones.models import Asiento, Funcion, Pelicula, Sala, TipoFormato
 from apps.reservas.models import AsientoReservado, Reserva
 from .fixtures_user import get_authenticated_client, get_authenticated_admin_client, get_user_generico, api_client, get_super_user, test_password, grupo_usuarios_registrados, get_authenticated_client_and_user
-from .fixtures_funcion import get_tipo_formato, get_tipos_formatos, get_pelicula, get_funcion, get_funciones, get_funcion_pasada
+from .fixtures_funcion import get_tipo_formato, get_tipos_formatos, get_pelicula, get_peliculas, get_funcion, get_funciones, get_funcion_pasada, get_funcion_
 from .fixtures_sala import get_sala, get_salas, get_asiento, get_asientos, get_asiento_
 from .fixtures_reserva import get_reserva, get_reservas
 from apps.usuario.models import Usuario
@@ -315,3 +315,32 @@ def test_reserva_asiento_no_perteneciente_sala(get_authenticated_client, get_asi
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert str(response.data[0]) == 'El asiento C2 no pertenece a la sala de la función.'
     assert asientoAjeno.sala != (asientoValido.sala == funcion.sala)
+
+@pytest.mark.django_db
+def test_reserva_misma_sala_diferente_funcion(get_authenticated_client, get_salas, get_peliculas, get_funcion_, mocker, get_asiento):
+    client = get_authenticated_client
+    sala1, sala2, sala3 = get_salas
+    pelicula1, pelicula2, pelicula3 = get_peliculas
+    funcion = get_funcion_(pelicula=pelicula1, sala=sala1, fecha="2025-06-15")
+    funcion2 = get_funcion_(pelicula=pelicula2, sala=sala1, fecha="2025-06-16")
+    asiento = get_asiento
+
+    fecha_actual_mock = datetime(2025, 6, 13, 21, 0, 0, tzinfo=timezone.utc)
+    mocker.patch('django.utils.timezone.now', return_value=fecha_actual_mock)
+
+    data = {
+        "funcion_id": funcion.id,
+        "cantidad_entradas": 1,
+        "asientos": [asiento.id]        
+    }
+    response = client.post(f'/api/reserva/', data=data)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    data = {
+        "funcion_id": funcion2.id,
+        "cantidad_entradas": 1,
+        "asientos": [asiento.id]        
+    }
+    response = client.post(f'/api/reserva/', data=data)
+    assert response.status_code == status.HTTP_201_CREATED
+
