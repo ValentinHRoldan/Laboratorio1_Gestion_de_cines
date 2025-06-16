@@ -34,3 +34,25 @@ def test_registro_usuario(client, grupo_usuarios_registrados, test_password):
     # Por ejemplo, que contenga el ID del nuevo usuario o un token de autenticación
     # data = response.json()
     # assert 'id' in data or 'token' in data
+
+@pytest.mark.django_db
+def test_registro_masivo_usuarios(client, test_password, grupo_usuarios_registrados):
+    url = reverse('usuario:register')
+
+    for i in range(10):
+        datos_usuario = {
+            'nombre': f'Nombre{i}',
+            'apellido': f'Apellido{i}',
+            'username': f'usuario{i}',
+            'password': test_password,
+            'password_confirmation': test_password,
+            'documento': f'{1000000 + i}', 
+            'email': f'usuario{i}@mail.com',
+        }
+
+        response = client.post(url, datos_usuario)
+        assert response.status_code == 201, f'Fallo en el usuario {i}: {response.content}'
+
+    # Verificación global
+    assert Usuario.objects.filter(username='usuario0').exists()
+    assert Usuario.objects.count() >= 10
