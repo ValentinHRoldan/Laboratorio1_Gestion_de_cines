@@ -62,3 +62,48 @@ class ReservaViewSet(viewsets.ModelViewSet):
             )
 
         print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)
+
+    def partial_update(self, request, *args, **kwargs):
+        usuario = self.request.user
+        reserva = self.get_object()
+
+        if not (usuario.is_staff or reserva.usuario == usuario):
+            raise ValidationError("No tiene permiso para modificar esta reserva.")
+
+
+        serializer = self.get_serializer(reserva, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        funcion = reserva.funcion
+        asiento_ids = serializer.validated_data.get('asientos', [])
+        # desde el postman se envía una lista de IDs
+        asientos = Asiento.objects.filter(id__in=asiento_ids)
+
+        #validar los asientos que pertenecen a la sala de la función
+        for asiento in asientos:
+            if asiento.sala != funcion.sala:
+                raise ValidationError(
+                    f"El asiento {asiento.fila}{asiento.numero} no pertenece a la sala de la función."
+                )
+
+        #se verifica si los asientos ya estan reservados para esta funcion
+        for asiento in asientos:
+            if AsientoReservado.objects.filter(asiento=asiento, funcion=funcion).exclude(reserva=reserva).exists():
+                raise ValidationError(
+                    f"El asiento {asiento.fila}{asiento.numero} ya está reservado para esta función."
+                )
+            
+        reserva.asientos_reservados.all().delete()
+        for asiento in asientos:
+            AsientoReservado.objects.create(
+                reserva=reserva,
+                asiento=asiento,
+                funcion=funcion
+            )
+
+        self.perform_update(serializer)
+
+        response_serializer = self.get_serializer(reserva)
+        print("PRECIO TOTAL DE RESERVA:", reserva.precio_total)
+
+        return Response(response_serializer.data)

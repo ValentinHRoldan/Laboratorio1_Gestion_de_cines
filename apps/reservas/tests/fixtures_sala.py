@@ -39,27 +39,21 @@ def get_asiento(get_sala):
 @pytest.fixture
 def get_asientos(get_sala):
     asiento1, _ = Asiento.objects.get_or_create(
-        defaults={
-            "sala": get_sala,
-            "fila": "C",
-            "numero": 1
-        }
+        sala=get_sala,
+        fila="C",
+        numero=1
     )
 
     asiento2, _ = Asiento.objects.get_or_create(
-        defaults={
-            "sala": get_sala,
-            "fila": "B",
-            "numero": 2
-        }
+        sala=get_sala,
+        fila="B",
+        numero=2
     )
 
     asiento3, _ = Asiento.objects.get_or_create(
-        defaults={
-            "sala": get_sala,
-            "fila": "A",
-            "numero": 3
-        }
+        sala=get_sala,
+        fila="A",
+        numero=3
     )
 
     return asiento1, asiento2, asiento3
