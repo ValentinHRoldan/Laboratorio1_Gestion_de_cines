@@ -57,3 +57,15 @@ def get_asientos(get_sala):
     )
 
     return asiento1, asiento2, asiento3
+
+@pytest.fixture
+def get_asiento_():
+    def make_asiento(sala, **kwargs):
+        asiento = Asiento.objects.create(
+            sala = sala,
+            fila = "C",
+            numero = 2
+        )
+
+        return asiento
+    return make_asiento
