@@ -18,6 +18,19 @@ def get_funcion(get_sala, get_pelicula, get_tipo_formato):
     return funcion
 
 @pytest.fixture
+def get_funcion_(get_tipo_formato):
+    def make_funcion(pelicula, sala, fecha):
+        funcion = Funcion.objects.create(
+            pelicula = pelicula,
+            sala = sala,
+            fecha = fecha,
+            hora = "18:00:00",
+            tipo_formato = get_tipo_formato,
+        )
+        return funcion
+    return make_funcion
+
+@pytest.fixture
 def get_funciones(get_salas, get_pelicula, get_tipo_formato):
     
     sala1, sala2, sala3 = get_salas
@@ -84,6 +97,49 @@ def get_pelicula():
     )
 
     return pelicula
+
+@pytest.fixture
+def get_peliculas():
+    pelicula1, _ = Pelicula.objects.get_or_create(
+        titulo='Inception',
+        defaults={
+            "duracion": 148,
+            "genero": "Sci-Fi",
+            "sinopsis": "Un ladrón especializado en robar secretos mediante el uso de la tecnología de sueños compartidos recibe una oferta para implantar una idea en la mente de un objetivo.",
+            "posters": "https://example.com/poster/inception.jpg",
+            "clasificacion": "PG-13",
+            "idioma": "Inglés",
+            "trailer": "https://example.com/trailer/inception.mp4"
+        }
+    )
+
+    pelicula2, _ = Pelicula.objects.get_or_create(
+        titulo='Interstellar',
+        defaults={
+            "duracion": 169,
+            "genero": "Ciencia Ficción, Drama",
+            "sinopsis": "Un grupo de astronautas viaja a través de un agujero de gusano en busca de un nuevo hogar para la humanidad.",
+            "posters": "https://example.com/poster/interstellar.jpg",
+            "clasificacion": "PG-13",
+            "idioma": "Inglés",
+            "trailer": "https://example.com/trailer/interstellar.mp4"
+        }
+    )
+
+    pelicula3, _ = Pelicula.objects.get_or_create(
+        titulo='The Matrix',
+        defaults={
+            "duracion": 136,
+            "genero": "Acción, Ciencia Ficción",
+            "sinopsis": "Un programador de computadoras descubre que el mundo en el que vive es una simulación creada por máquinas inteligentes para dominar a la humanidad.",
+            "posters": "https://example.com/poster/matrix.jpg",
+            "clasificacion": "R",
+            "idioma": "Inglés",
+            "trailer": "https://example.com/trailer/matrix.mp4"
+        }
+    )
+
+    return pelicula1, pelicula2, pelicula3
 
 
 @pytest.fixture
