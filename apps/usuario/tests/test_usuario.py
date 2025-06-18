@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 from apps.usuario.models import Usuario
+from .fixtures_user import get_user_generico, get_authenticated_client, api_client
 
 @pytest.mark.django_db
 def test_login_usuario(client, create_user, test_password):
@@ -56,3 +57,14 @@ def test_registro_masivo_usuarios(client, test_password, grupo_usuarios_registra
     # Verificación global
     assert Usuario.objects.filter(username='usuario0').exists()
     assert Usuario.objects.count() >= 10
+
+
+@pytest.mark.django_db
+def test_api_creacion_usuario(get_authenticated_client):
+    assert Usuario.objects.filter(username='testuser').exists()
+
+@pytest.mark.django_db
+def test_api_creacion_usuario2(get_user_generico):
+    print(get_user_generico)
+    print(get_user_generico.user_permissions.all())
+    assert Usuario.objects.filter(username='testuser').exists()

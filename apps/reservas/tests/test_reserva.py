@@ -11,12 +11,6 @@ from apps.usuario.models import Usuario
 from rest_framework import status
 
 
-def test_foo():
-    assert True
-
-
-def test_lista():
-    assert list(reversed([1, 2, 3])) == [3, 2, 1]
 
 #LISTAR RESERVA CON USUARIO ADMIN
 
@@ -208,7 +202,7 @@ def test_api_modificacion_reserva(mocker, get_authenticated_client, get_reserva,
 #MODIFICACIÓN DE RESERVA DE OTRO USUARIO
 
 @pytest.mark.django_db
-def test_api_modificacion_reserva_agena(mocker, get_authenticated_client_and_user, get_reservas, get_asientos):
+def test_api_modificacion_reserva_ajena(mocker, get_authenticated_client_and_user, get_reservas, get_asientos):
     
     user, client = get_authenticated_client_and_user
     reserva1, reserva2, reserva3 = get_reservas
@@ -241,15 +235,6 @@ def test_api_eliminacion_reserva(get_authenticated_client, get_reserva):
 
 #-----------------
 
-@pytest.mark.django_db
-def test_api_creacion_usuario(get_authenticated_client):
-    assert Usuario.objects.filter(username='testuser').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_usuario2(get_user_generico):
-    print(get_user_generico)
-    print(get_user_generico.user_permissions.all())
-    assert Usuario.objects.filter(username='testuser').exists()
 
 
 
