@@ -1,9 +1,9 @@
 import pytest
 
 from apps.reservas.models import AsientoReservado, Reserva
-from .fixtures_funcion import get_funcion, get_tipo_formato, get_funciones
-from .fixtures_sala import get_sala, get_asiento, get_asientos
-from .fixtures_user import get_user_generico, get_super_user
+from apps.funciones.tests.fixtures_funcion import get_funcion, get_tipo_formato, get_funciones
+from apps.funciones.tests.fixtures_sala import get_sala, get_asiento, get_asientos
+from apps.usuario.tests.fixtures_user import get_user_generico, get_super_user
 from django.contrib.auth import get_user_model
 
 User = get_user_model()

@@ -3,12 +3,13 @@ import pytest
 
 from apps.funciones.models import Asiento, Funcion, Pelicula, Sala, TipoFormato
 from apps.reservas.models import AsientoReservado, Reserva
-from .fixtures_user import get_authenticated_client, get_authenticated_admin_client, get_user_generico, api_client, get_super_user, test_password, grupo_usuarios_registrados, get_authenticated_client_and_user
-from .fixtures_funcion import get_tipo_formato, get_tipos_formatos, get_pelicula, get_peliculas, get_funcion, get_funciones, get_funcion_pasada, get_funcion_
-from .fixtures_sala import get_sala, get_salas, get_asiento, get_asientos, get_asiento_
+from apps.usuario.tests.fixtures_user import get_authenticated_client, get_authenticated_admin_client, get_user_generico, api_client, get_super_user, test_password, grupo_usuarios_registrados, get_authenticated_client_and_user
+from apps.funciones.tests.fixtures_funcion import get_tipo_formato, get_tipos_formatos, get_pelicula, get_peliculas, get_funcion, get_funciones, get_funcion_pasada, get_funcion_
+from apps.funciones.tests.fixtures_sala import get_sala, get_salas, get_asiento, get_asientos, get_asiento_
 from .fixtures_reserva import get_reserva, get_reservas
 from apps.usuario.models import Usuario
 from rest_framework import status
+
 
 def test_foo():
     assert True
@@ -250,45 +251,7 @@ def test_api_creacion_usuario2(get_user_generico):
     print(get_user_generico.user_permissions.all())
     assert Usuario.objects.filter(username='testuser').exists()
 
-@pytest.mark.django_db
-def test_api_creacion_formato(get_tipo_formato):
-    print(get_tipo_formato)
-    assert TipoFormato.objects.filter(nombre='2D').exists()
 
-@pytest.mark.django_db
-def test_api_creacion_formatos(get_tipos_formatos):
-    print(get_tipos_formatos)
-    assert TipoFormato.objects.filter(nombre='2D').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_pelicula(get_pelicula):
-    print(get_pelicula)
-    assert Pelicula.objects.filter(titulo='Inception').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_sala(get_sala):
-    print(get_sala)
-    assert Sala.objects.filter(ubicacion='Piso 1 - A').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_salas(get_salas):
-    print(get_salas)
-    assert Sala.objects.filter(ubicacion='Piso 1 - A').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_asiento(get_asiento):
-    print(get_asiento)
-    assert Asiento.objects.filter(fila='C').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_asientos(get_asientos):
-    print(get_asientos)
-    assert Asiento.objects.filter(fila='C').exists()
-
-@pytest.mark.django_db
-def test_api_creacion_funcion(get_funcion):
-    print(get_funcion)
-    assert Funcion.objects.filter(sala=1).exists()
 
 @pytest.mark.django_db
 def test_api_creacion_reservaf(get_reserva):
