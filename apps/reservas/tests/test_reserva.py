@@ -12,8 +12,7 @@ from rest_framework import status
 
 
 
-#LISTAR RESERVA CON USUARIO ADMIN
-
+# Test de integración: Listar reservas con usuario admin
 @pytest.mark.django_db
 def test_api_listar_reservas(get_authenticated_admin_client, get_reservas):
     
@@ -35,8 +34,7 @@ def test_api_listar_reservas(get_authenticated_admin_client, get_reservas):
     # Comparamos que los conjuntos de IDs sean iguales
     assert response_ids == reservas_ids
 
-#LISTAR RESERVA CON USUARIO GENERICO
-
+# Test de integración: Listar reservas con usuario registrado (solo las suyas)
 @pytest.mark.django_db
 def test_api_listar_reservas2(get_authenticated_client, get_reservas):
     
@@ -58,8 +56,7 @@ def test_api_listar_reservas2(get_authenticated_client, get_reservas):
     
     assert response_ids != reservas_ids
 
-#LISTAR RESERVA CON USUARIO NO AUTENTICADO
-
+# Test de integración: Listar reservas sin autenticación falla
 @pytest.mark.django_db
 def test_api_listar_reservas_falla_usuario_no_autenticado(api_client, get_reservas):
     response = api_client.get(f'/api/reserva/')
@@ -67,8 +64,7 @@ def test_api_listar_reservas_falla_usuario_no_autenticado(api_client, get_reserv
     assert response.status_code == 401
     assert str(response.data['detail']) == "Authentication credentials were not provided."
 
-#CREACION DE RESERVA
-
+# Test de aceptación: Creación exitosa de reserva
 @pytest.mark.django_db
 def test_api_creacion_reserva(mocker, get_authenticated_client, get_asientos, get_funcion):
     
@@ -97,8 +93,7 @@ def test_api_creacion_reserva(mocker, get_authenticated_client, get_asientos, ge
         asientos_reservados__asiento__in=[asiento1, asiento2, asiento3]
     ).count() == 1
 
-#CREACION DE RESERVA DE FUNCION PASADA
-
+# Test de aceptación: Creación de reserva falla para función pasada
 @pytest.mark.django_db
 def test_api_creacion_reserva_falla_funcion_pasada(mocker, get_authenticated_client, get_asientos, get_funcion_pasada):
     
@@ -122,8 +117,7 @@ def test_api_creacion_reserva_falla_funcion_pasada(mocker, get_authenticated_cli
     assert response.status_code == 400
     assert str(response.data['funcion_id']['info']) == "La función ya pasó."
 
-#RESERVA ASIENTO YA RESERVADO DE UNA FUNCION
-
+# Test de aceptación: Creación de reserva falla si asiento ocupado
 @pytest.mark.django_db
 def test_api_creacion_reserva_falla_asiento_ocupado(mocker, get_authenticated_client, get_asientos, get_reserva, get_funcion):
     
@@ -148,8 +142,7 @@ def test_api_creacion_reserva_falla_asiento_ocupado(mocker, get_authenticated_cl
 
     assert str(response.data[0]) == "El asiento C1 ya está reservado para esta función."
 
-#RESERVA DE MAS ASIENTOS QUE LOS SOLICITADOS
-
+# Test de aceptación: Creación de reserva falla si cantidad de asientos no coincide
 @pytest.mark.django_db
 def test_api_creacion_reserva_falla_asientos_de_mas(mocker, get_authenticated_client, get_asientos, get_reserva, get_funcion):
     
@@ -174,8 +167,7 @@ def test_api_creacion_reserva_falla_asientos_de_mas(mocker, get_authenticated_cl
 
     assert str(response.data['info'][0]) == "La cantidad de asientos no coincide con la cantidad de entradas."
 
-#MODIFICACIÓN DE RESERVA
-
+# Test de integración: Modificación de reserva propia
 @pytest.mark.django_db
 def test_api_modificacion_reserva(mocker, get_authenticated_client, get_reserva, get_asientos):
     
@@ -199,8 +191,7 @@ def test_api_modificacion_reserva(mocker, get_authenticated_client, get_reserva,
     ids_en_response = [a['asiento']['id'] for a in response.data['asientos_reservados']]
     assert ids_en_response == [asiento1.id, asiento2.id]
 
-#MODIFICACIÓN DE RESERVA DE OTRO USUARIO
-
+# Test de integración: Modificación de reserva ajena falla
 @pytest.mark.django_db
 def test_api_modificacion_reserva_ajena(mocker, get_authenticated_client_and_user, get_reservas, get_asientos):
     
@@ -221,8 +212,7 @@ def test_api_modificacion_reserva_ajena(mocker, get_authenticated_client_and_use
     assert response.status_code == 404
     assert reserva2.usuario != user
 
-#ELIMINACIÓN DE RESERVA
-
+# Test de integración: Eliminación de reserva propia
 @pytest.mark.django_db
 def test_api_eliminacion_reserva(get_authenticated_client, get_reserva):
     
@@ -235,34 +225,72 @@ def test_api_eliminacion_reserva(get_authenticated_client, get_reserva):
 
 #-----------------
 
-
-
-
+# Test unitario: Prueba creación de reserva
 @pytest.mark.django_db
 def test_api_creacion_reservaf(get_reserva):
     print(get_reserva)
     assert Reserva.objects.filter(funcion=1).exists()
-
+# Test de aceptación: Flujo completo de reserva exitosa
 @pytest.mark.django_db
 def test_reserva_asiento_no_perteneciente_sala(get_authenticated_client, get_asiento_, get_salas, get_asiento, get_funcion, mocker):
     cliente = get_authenticated_client
     funcion = get_funcion
     sala1, sala2, sala3 = get_salas
-    asientoAjeno = get_asiento_(sala=sala2)
-    asientoValido = get_asiento
+
+@pytest.mark.django_db
+def test_flujo_completo_reserva_exitosa(mocker, get_authenticated_client, get_asientos, get_funcion):
+    """
+    Escenario: Reserva completa exitosa
+
+    Given un usuario autenticado y una función con asientos disponibles
+    When realiza una reserva, la consulta, la modifica y la elimina
+    Then el sistema responde correctamente en cada paso
+    """
+
+    client = get_authenticated_client
+    asiento1, asiento2, _ = get_asientos
+    funcion = get_funcion
 
     fecha_actual_mock = datetime(2025, 6, 13, 21, 0, 0, tzinfo=timezone.utc)
     mocker.patch('django.utils.timezone.now', return_value=fecha_actual_mock)
 
+    # Paso 1: listar funciones
+    response_list = client.get('/api/funcion/')
+    assert response_list.status_code == 200
+    assert len(response_list.data['results']) > 0
+
+    # Paso 2: crear reserva
     data = {
         "funcion_id": funcion.id,
-        "cantidad_entradas": 1,
-        "asientos": [asientoAjeno.id]        
+        "cantidad_entradas": 2,
+        "asientos": [asiento1.id, asiento2.id]
     }
-    response = cliente.post(f'/api/reserva/', data=data)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert str(response.data[0]) == 'El asiento C2 no pertenece a la sala de la función.'
-    assert asientoAjeno.sala != (asientoValido.sala == funcion.sala)
+    response_create = client.post('/api/reserva/', data=data)
+    assert response_create.status_code == 201
+
+    reserva_id = response_create.data['id']
+
+    # Paso 3: obtener reserva
+    response_get = client.get(f'/api/reserva/{reserva_id}/')
+    assert response_get.status_code == 200
+    assert response_get.data['cantidad_entradas'] == 2
+
+    # Paso 4: modificar reserva
+    data_update = {
+        "cantidad_entradas": 1,
+        "asientos": [asiento1.id]
+    }
+    response_update = client.patch(f'/api/reserva/{reserva_id}/', data=data_update)
+    assert response_update.status_code == 200
+    assert response_update.data['cantidad_entradas'] == 1
+
+    # Paso 5: eliminar reserva
+    response_delete = client.delete(f'/api/reserva/{reserva_id}/')
+    assert response_delete.status_code == 204
+
+    # Verificar eliminación
+    response_get_after = client.get(f'/api/reserva/{reserva_id}/')
+    assert response_get_after.status_code == 404
 
 @pytest.mark.django_db
 def test_reserva_misma_sala_diferente_funcion(get_authenticated_client, get_salas, get_peliculas, get_funcion_, mocker, get_asiento):

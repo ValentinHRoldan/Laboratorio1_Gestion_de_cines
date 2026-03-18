@@ -3,6 +3,7 @@ from django.urls import reverse
 from apps.usuario.models import Usuario
 from .fixtures_user import get_user_generico, get_authenticated_client, api_client
 
+# Test de integración: Login de usuario
 @pytest.mark.django_db
 def test_login_usuario(client, create_user, test_password):
     user = create_user
@@ -14,6 +15,7 @@ def test_login_usuario(client, create_user, test_password):
     })
     assert response.status_code == 200
 
+# Test de integración: Registro de usuario
 @pytest.mark.django_db
 def test_registro_usuario(client, grupo_usuarios_registrados, test_password):
     url = reverse('usuario:register')
@@ -36,6 +38,7 @@ def test_registro_usuario(client, grupo_usuarios_registrados, test_password):
     # data = response.json()
     # assert 'id' in data or 'token' in data
 
+# Test de integración: Registro masivo de usuarios
 @pytest.mark.django_db
 def test_registro_masivo_usuarios(client, test_password, grupo_usuarios_registrados):
     url = reverse('usuario:register')
@@ -58,11 +61,12 @@ def test_registro_masivo_usuarios(client, test_password, grupo_usuarios_registra
     assert Usuario.objects.filter(username='usuario0').exists()
     assert Usuario.objects.count() >= 10
 
-
+# Test unitario: Creación de usuario
 @pytest.mark.django_db
 def test_api_creacion_usuario(get_authenticated_client):
     assert Usuario.objects.filter(username='testuser').exists()
 
+# Test unitario: Creación de usuario genérico
 @pytest.mark.django_db
 def test_api_creacion_usuario2(get_user_generico):
     print(get_user_generico)

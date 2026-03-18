@@ -5,13 +5,13 @@ from unittest.mock import MagicMock
 from apps.funciones.servicios.tmdb import importar_peliculas_estreno
 from decouple import config
 
+# Test unitario: Prueba la creación de una película
 @pytest.mark.django_db
 def test_api_creacion_pelicula(get_pelicula):
     print(get_pelicula)
     assert Pelicula.objects.filter(titulo='Inception').exists()
 
-
-
+# Test unitario: Prueba la llamada correcta a la API de TMDB
 @pytest.mark.django_db
 def test_tmdb_api_llamada_correcta(mocker):
     api_key = config("TMDB_API_KEY")
@@ -36,3 +36,19 @@ def test_tmdb_api_llamada_correcta(mocker):
     importar_peliculas_estreno()
 
     mock_get.assert_called_once_with(url_esperada)
+
+# Test unitario: Validación de duración positiva en película
+@pytest.mark.django_db
+def test_pelicula_duracion_positiva():
+    from apps.funciones.models import Pelicula
+    with pytest.raises(Exception):  # Asumiendo validación
+        Pelicula.objects.create(
+            titulo='Test',
+            duracion=-100,  # Duración negativa
+            genero="Test",
+            sinopsis="Test",
+            posters="test.jpg",
+            clasificacion="PG",
+            idioma="Español",
+            trailer="test.mp4"
+        )
