@@ -57,7 +57,7 @@ class FuncionSerializer(serializers.ModelSerializer):
         })
 
     def validate_fecha(self, value):
-        if value < date.today():
+        if value < timezone.now().date():
             self.generarError('La fecha no puede ser anterior a la actual')
         return value
 

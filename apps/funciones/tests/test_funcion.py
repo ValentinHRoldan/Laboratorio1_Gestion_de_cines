@@ -29,6 +29,7 @@ def test_api_creacion_funcion_admin(get_authenticated_admin_client, get_pelicula
         "tipo_formato_id": formato.id,
         "activa": True
     }
+    
     response = client.post(f'/api/funcion/', data=data)
     assert response.status_code == status.HTTP_201_CREATED
 
